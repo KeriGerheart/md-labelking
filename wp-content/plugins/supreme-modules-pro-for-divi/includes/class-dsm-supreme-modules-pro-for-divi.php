@@ -207,6 +207,9 @@ class Dsm_Supreme_Modules_Pro_For_Divi {
 		if ( 'on' === $this->settings_api->get_option( 'dsm_use_supreme_popup', 'dsm_general' ) ) {
 			$this->dsm_add_popup_modules();
 			add_filter( 'et_module_shortcode_output', array( $this, 'output_modules_popup' ), 10, 3 );
+			add_action( 'save_post_et_pb_layout', array( $this, 'dsm_delete_library_transient' ), 10, 3 );
+			add_action( 'deleted_post_et_pb_layout', array( $this, 'dsm_delete_library_transient' ), 10, 3 );
+			add_action( 'edit_post_et_pb_layout', array( $this, 'dsm_delete_library_transient' ), 10, 3 );
 		}
 
 		if ( 'on' === $this->settings_api->get_option( 'dsm_use_readmore_content', 'dsm_general' ) ) {
@@ -405,15 +408,6 @@ class Dsm_Supreme_Modules_Pro_For_Divi {
 
 		return $footer_text;
 	}
-	public function dsm_admin_load_enqueue( $hook_suffix ) {
-		if ( in_array( $hook_suffix, array( 'post.php', 'post-new.php' ) ) ) {
-			$screen = get_current_screen();
-
-			if ( is_object( $screen ) && 'dsm_header_footer' === $screen->post_type ) {
-				wp_enqueue_script( 'dsm-admin-js', plugins_url( 'admin/js/dsm-admin.js', dirname( __FILE__ ) ) );
-			}
-		}
-	}
 
 	/**
 	 * Shortcode Empty Paragraph fix
@@ -429,8 +423,6 @@ class Dsm_Supreme_Modules_Pro_For_Divi {
 		$content = strtr( $content, $array );
 		return $content;
 	}
-
-
 
 	/**
 	 * Creates the Divi Supreme Shortcodes.
@@ -463,7 +455,7 @@ class Dsm_Supreme_Modules_Pro_For_Divi {
 	 * @since 1.0.0
 	 */
 	public function dsm_add_readmore_modules() {
-		$dsm_readmore_divi_modules = dsm_load_readme_divi_modules();
+		$dsm_readmore_divi_modules = $this->dsm_load_readme_divi_modules();
 		foreach ( $dsm_readmore_divi_modules as $module ) {
 			if ( 'none' !== $module ) {
 				$filter = 'et_pb_all_fields_unprocessed_' . $module . '';
@@ -651,7 +643,7 @@ class Dsm_Supreme_Modules_Pro_For_Divi {
 		return array_merge( $fields_unprocessed, $fields );
 	}
 	public function output_modules_readmore( $output, $render_slug, $module ) {
-		if ( dsm_load_readme_divi_modules() !== $render_slug ) {
+		if ( $this->dsm_load_readme_divi_modules() !== $render_slug ) {
 			if ( is_array( $output ) ) {
 				return $output;
 			}
@@ -3535,16 +3527,25 @@ class Dsm_Supreme_Modules_Pro_For_Divi {
 			'posts_per_page' => -1,
 		);
 
-		$dsm_library_list = array( 'none' => '-- Select Library --' );
+		if ( false === ( $dsm_library_list = get_transient( 'dsm_load_library' ) ) ) {
 
-		if ( $categories = get_posts( $args ) ) {
-			foreach ( $categories as $category ) {
-				$dsm_library_list[ $category->ID ] = $category->post_title;
+			$dsm_library_list = array( 'none' => '-- Select Library --' );
+
+			if ( $categories = get_posts( $args ) ) {
+				foreach ( $categories as $category ) {
+					$dsm_library_list[ $category->ID ] = $category->post_title;
+				}
 			}
+
+			set_transient( 'dsm_load_library', $dsm_library_list, 24 * HOUR_IN_SECONDS );
 		}
 
-		return $dsm_library_list;
+		return get_transient( 'dsm_load_library' );
 	}
+	public function dsm_delete_library_transient() {
+		delete_transient( 'dsm_load_library' );
+	}
+
 	/**
 	 * Load WordPress Role Names
 	 *
@@ -3770,7 +3771,6 @@ class Dsm_Supreme_Modules_Pro_For_Divi {
 			'dsm_image_accordion_child',
 		);
 		return $dsm_load_default_child_modules;
-
 	}
 	public function dsm_load_divi_with_child_modules() {
 		$dsm_divi_child_modules         = $this->dsm_load_divi_modules();
@@ -3778,6 +3778,10 @@ class Dsm_Supreme_Modules_Pro_For_Divi {
 
 		$dsm_load_divi_with_child_modules = array_merge( $dsm_divi_child_modules, $dsm_load_default_child_modules );
 		return $dsm_load_divi_with_child_modules;
+	}
+	public function dsm_load_readme_divi_modules() {
+		$dsm_load_readme_divi_modules = array( 'et_pb_text', 'et_pb_blog', 'et_pb_code', 'et_pb_cta', 'et_pb_blurb' );
+		return $dsm_load_readme_divi_modules;
 	}
 
 }

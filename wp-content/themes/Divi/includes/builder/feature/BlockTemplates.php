@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Block Templates Compatibility Class.
  *
- * @since ??
+ * @since 4.9.8
  */
 class ET_Builder_Block_Templates {
 	/**
@@ -32,7 +32,7 @@ class ET_Builder_Block_Templates {
 	/**
 	 * Get the class instance.
 	 *
-	 * @since ??
+	 * @since 4.9.8
 	 *
 	 * @return ET_Builder_Block_Templates
 	 */
@@ -47,7 +47,7 @@ class ET_Builder_Block_Templates {
 	/**
 	 * Set query templates filters to override block templates.
 	 *
-	 * @since ??
+	 * @since 4.9.8
 	 */
 	public function set_query_templates_filters() {
 		// Bail early if current active builder is not DBP.
@@ -117,7 +117,7 @@ class ET_Builder_Block_Templates {
 	 * Get pre-defined query template to override block template (modified default template
 	 * or custom template).
 	 *
-	 * @since ??
+	 * @since 4.9.8
 	 *
 	 * @param string $template  Path to the template. See locate_template().
 	 * @param string $type      Sanitized filename without extension.

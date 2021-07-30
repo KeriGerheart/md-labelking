@@ -3,7 +3,7 @@
  * Plugin Name: Divi Supreme Pro
  * Plugin URI:  https://divisupreme.com
  * Description: Divi Supreme Modules Pro enhances the experience and features found on Divi and extend with custom creative modules to help you build amazing websites.
- * Version:     4.5.91
+ * Version:     4.6.2
  * Author:      Divi Supreme
  * Author URI:  https://divisupreme.com
  * License:     GPL2
@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'DSM_PRO_VERSION' ) ) {
-	define( 'DSM_PRO_VERSION', '4.5.91' );
+	define( 'DSM_PRO_VERSION', '4.6.2' );
 }
 /**
  * The code that runs during plugin activation.
