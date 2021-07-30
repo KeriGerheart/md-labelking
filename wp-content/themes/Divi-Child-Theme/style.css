@@ -9,3 +9,23 @@
 */
 
 /*****Add any custom CSS below this line*****/
+
+/*****Home Header*****/
+
+#home-header {
+    min-height: 90vh;
+}
+
+.home-hero-section h1 {
+    color:#fff;
+    font-family: Montserrat;
+    font-size: 65px;
+    font-weight: 700;
+    text-align:center;
+    margin-top: 15%
+}
+    
+.home-hero-section span {
+    color: #f7ca00;
+    font-size: 75px;
+}
