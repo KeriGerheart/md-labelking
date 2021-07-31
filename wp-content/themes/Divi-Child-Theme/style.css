@@ -29,3 +29,24 @@
     color: #f7ca00;
     font-size: 75px;
 }
+
+/*****Main Navigation*****/
+
+#top-menu li {
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.et_header_style_left #et-top-navigation nav>ul>li>a,
+.et_header_style_split #et-top-navigation nav>ul>li>a {
+ padding-bottom:0;
+ margin-bottom: 33px;
+}
+
+#menu-item-44 a {
+    background-color: #f5f5f5;
+    color: #242d3f !important;
+    padding: 10px 40px !important;
+    border-radius: 6px;
+}
